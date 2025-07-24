@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solve</title>
+</head>
+<body>
+    <form action="{{ url_for('solving.solve') }}" method="POST">
+        <input type="hidden" name="token" value="{{ token }}">
+
+        <h4>Choose the operation:</h4>
+        <select name="operation" id="operation">
+            <option value="pow">pow function</option>
+            <option value="fibonacci">n-th fibonacci number</option>
+            <option value="factorial">factorial of the number</option>
+        </select>
+
+        <h4>Operand 1: </h4>
+        <input name="operand1" value="{{ operand1 or '' }}">
+
+        <h4>Operand 2: </h4>
+        <input name="operand2" value="{{ operand2 or '' }}">
+
+        <button type="submit">Solve</button>
+        <a href="{{ url_for('solving.index') }}"><button type="button">Reset</button></a>
+    </form>
+
+    {% if result %}
+        <h3>Operation result: {{result}}</h3>
+    {% endif %}
+
+    {% if error %}
+        <h3>{{error}}</h3>
+    {% endif%}
+</body>
+</html>
