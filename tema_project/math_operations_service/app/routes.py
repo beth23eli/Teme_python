@@ -32,6 +32,7 @@ def solve():
             result = compute_result(operation, first, second)
         else:
             result = compute_result(operation, first)
+            second = None
 
 
         db = get_db()
