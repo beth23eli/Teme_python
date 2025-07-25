@@ -11,7 +11,7 @@ It was built with:
     - operand_a - the first operand that appears in every type of permitted operation;
     - operand_b - the second operand that can appear just in pow function;
     - result - to store the result of a computed operation;
-    - timestamp - whis is the time when the operation was performed.
+    - timestamp - this is the time when the operation was performed.
 
 - ```Python with Flask``` as the app server that processes the user requests and interacts with the database to store every computed operation. To communicate with the interface, I created the routes:
     - ROUTE: /api, method: GET -  This route is used to land the initial page, which means generating the JWT token and rendering the template;

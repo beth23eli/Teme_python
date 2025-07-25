@@ -14,7 +14,7 @@ services:
 
   db:
     image: postgres:15
-    restart: always
+    restart: on-failure
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

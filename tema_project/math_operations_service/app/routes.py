@@ -4,8 +4,8 @@ from .operations_service import compute_result
 from .db import get_db
 from .auth import jwt_authorized, generate_jwt_token
 
-
 solving_bp = Blueprint("solving", __name__)
+
 
 @solving_bp.route("/", methods=["GET"])
 def index():
@@ -40,9 +40,7 @@ def solve():
             INSERT INTO operations (type, operand_a, operand_b, result)
             VALUES (%s, %s, %s, %s)
         """, (operation, first, second, result))
-
         db.commit()
-
 
     except Exception as e:
         error = f"{str(e)}"

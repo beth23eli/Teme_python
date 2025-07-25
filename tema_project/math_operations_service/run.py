@@ -2,8 +2,6 @@ from app import create_app
 from app.cache import cache
 from app.auth import generate_jwt_token
 import flask_monitoringdashboard as dashboard
-from dotenv import load_dotenv
-load_dotenv()
 
 app = create_app()
 dashboard.config.init_from(file='config.cfg')
