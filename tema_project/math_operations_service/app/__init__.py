@@ -1,12 +1,20 @@
 from flask import Flask
-from .db import init_db
-from .routes import solving_bp
+from .controllers.operationController import OperationController
+from .extensions import db, migrate
+from dotenv import load_dotenv
+load_dotenv()
+
 
 def create_app():
     app = Flask(__name__)
-    init_db()
+    #app.config.from_object("config.Config")
+    app.config.from_object("app.config.Config")
 
-    app.register_blueprint(solving_bp, url_prefix="/api")
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    operation_controller = OperationController()
+    app.register_blueprint(operation_controller.blueprint)
 
     return app
 

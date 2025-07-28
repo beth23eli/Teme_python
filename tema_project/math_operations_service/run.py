@@ -1,11 +1,10 @@
 from app import create_app
-from app.cache import cache
-from app.auth import generate_jwt_token
+from app.extensions import cache
+from app.auth.auth_utils import generate_jwt_token
 import flask_monitoringdashboard as dashboard
 
 app = create_app()
 dashboard.config.init_from(file='config.cfg')
-
 
 if __name__ == "__main__":
     dashboard.bind(app)
@@ -16,3 +15,7 @@ if __name__ == "__main__":
         cache.clear()
 
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+# docker-compose run web flask db init       # only once
+# docker-compose run web flask db migrate -m "initial schema"
+# docker-compose run web flask db upgrade

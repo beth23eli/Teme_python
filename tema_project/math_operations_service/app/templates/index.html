@@ -68,36 +68,71 @@
 </style>
 </head>
 <body>
-    <form action="{{ url_for('solving.solve') }}" method="POST">
-        <input type="hidden" name="token" value="{{ token }}">
+    <form id="operation-form">
+        <input type="hidden" id="token" value="{{ token }}">
 
-        <h4>Choose the operation:</h4>
-        <select name="operation" id="operation">
-            <option value="pow">pow function</option>
-            <option value="fibonacci">n-th fibonacci number</option>
-            <option value="factorial">factorial of the number</option>
+        <label for="operation">Choose operation:</label>
+        <select id="operation" name="operation">
+            <option value="power">Power</option>
+            <option value="fibonacci">Fibonacci</option>
+            <option value="factorial">Factorial</option>
         </select>
 
-        <h4>Operand 1: </h4>
-        <input name="operand1" value="{{ operand1 or '' }}">
+        <label for="operand1">Operand 1:</label>
+        <input type="text" id="operand1" name="operand1">
 
-        <h4>Operand 2: </h4>
-        <input name="operand2" value="{{ operand2 or '' }}">
+        <label for="operand2">Operand 2:</label>
+        <input type="text" id="operand2" name="operand2">
 
-        <div class="button-group">
-            <button type="submit">Solve</button>
-            <a href="{{ url_for('solving.index') }}">
-                <button type="button">Reset</button>
-            </a>
-        </div>
+        <button type="submit">Solve</button>
     </form>
 
-    {% if result %}
-        <h3>Operation result: {{result}}</h3>
-    {% endif %}
+    <div id="output" class="result"></div>
+    <script>
+            document.getElementById("operation-form").addEventListener("submit", async function (e) {
+                e.preventDefault();
 
-    {% if error %}
-        <h3>{{error}}</h3>
-    {% endif%}
+                const operation = document.getElementById("operation").value;
+                const op1 = document.getElementById("operand1").value;
+                const op2 = document.getElementById("operand2").value;
+                const token = document.getElementById("token").value;
+                const output = document.getElementById("output");
+
+                output.innerHTML = "Working...";
+
+                try {
+                    let url = `/${operation}`;
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ base: parseFloat(op1), exp: parseFloat(op2) })
+                    };
+
+                    if (operation === "factorial" || operation === "fibonacci") {
+                        url += `/${parseInt(op1)}`;
+                        options = {
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            }
+                        };
+                    }
+
+                    const response = await fetch(url, options);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        output.innerHTML = `Result: ${data.result}`;
+                    } else {
+                        output.innerHTML = `<span class="error">Error: ${data.error}</span>`;
+                    }
+                } catch (err) {
+                    output.innerHTML = `<span class="error">Exception: ${err.message}</span>`;
+                }
+            });
+        </script>
 </body>
 </html>
